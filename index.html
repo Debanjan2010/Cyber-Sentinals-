@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cyber Sentinels — Academy of Cyber Defense</title>
+<meta name="description" content="A fast, hands-on cybersecurity awareness game for students: hunt phishing emails, forge strong passwords, survive social engineering and stop a live breach.">
+<meta name="theme-color" content="#05070f">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>🛡️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="bg" aria-hidden="true">
+  <div class="grid"></div>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+  <div class="scan"></div>
+</div>
+<canvas id="fx" aria-hidden="true"></canvas>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="logo">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 2.6 4.8 5.4v6.1c0 4.6 3 8.2 7.2 9.9 4.2-1.7 7.2-5.3 7.2-9.9V5.4L12 2.6Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+        <path d="M12 8.2v4.6M12 15.6v.1" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+      </svg>
+    </span>
+    <span class="brand-text">
+      <b>Cyber Sentinels</b>
+      <i>Academy of Cyber Defense</i>
+    </span>
+  </div>
+  <div class="player">
+    <div class="xpwrap" id="xpWrap" hidden>
+      <div class="lvl" id="topLevel">LVL 1 · RECRUIT</div>
+      <div class="xpbar"><i id="topBar"></i></div>
+    </div>
+    <button class="restart-btn" id="restartBtn" type="button" title="Restart everything and return to the home screen" aria-label="Restart everything">
+      <span class="ri" aria-hidden="true">⟲</span><span class="rlabel">Restart all</span>
+    </button>
+    <button class="icon-btn" id="soundBtn" aria-label="Toggle sound" title="Toggle sound">🔊</button>
+  </div>
+</header>
+
+<main id="main">
+  <!-- Home screen -->
+  <section class="screen active" id="s-home">
+    <div class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow"><span class="pulse"></span> Live threat simulation · free for students</span>
+        <h1>Think like a defender.<br><span class="grad">Beat the hackers.</span></h1>
+        <p class="lede">
+          Five missions. Real-world examples. Learn to spot a suspicious message, make a strong
+          practice password, and choose safer next steps when something feels wrong.
+        </p>
+        <form id="nameForm" class="startbox" autocomplete="off">
+          <label class="sr-only" for="codename">Your codename</label>
+          <input id="codename" maxlength="16" placeholder="Enter your codename" spellcheck="false" autocomplete="off">
+          <button class="btn primary" type="submit" id="startBtn">Start training <span aria-hidden="true">→</span></button>
+        </form>
+        <p class="micro" id="returnNote" hidden></p>
+        <div class="chips">
+          <span class="chip">🎣 Phishing</span>
+          <span class="chip">🔐 Passwords</span>
+          <span class="chip">🧠 Rapid fire</span>
+          <span class="chip">🎭 Social engineering</span>
+          <span class="chip">👾 Boss fight</span>
+        </div>
+      </div>
+
+      <div class="hero-visual" aria-hidden="true">
+        <div class="radar">
+          <div class="sweep"></div>
+          <div class="ring r1"></div>
+          <div class="ring r2"></div>
+          <div class="ring r3"></div>
+          <span class="dot d1"></span>
+          <span class="dot d2"></span>
+          <span class="dot d3"></span>
+          <span class="dot d4"></span>
+          <div class="shield">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M12 2.6 4.8 5.4v6.1c0 4.6 3 8.2 7.2 9.9 4.2-1.7 7.2-5.3 7.2-9.9V5.4L12 2.6Z" stroke="url(#g1)" stroke-width="1.6" stroke-linejoin="round"/>
+              <path d="m8.6 11.8 2.4 2.4 4.6-4.8" stroke="url(#g1)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+              <defs><linearGradient id="g1" x1="4" y1="3" x2="20" y2="21">
+                <stop stop-color="#5ef2ff"/><stop offset="1" stop-color="#a78bfa"/>
+              </linearGradient></defs>
+            </svg>
+          </div>
+        </div>
+        <div class="floating f1">🎣 New phishing attempt</div>
+        <div class="floating f2">🔐 2FA enabled</div>
+        <div class="floating f3">⚠️ 14 threats blocked</div>
+      </div>
+    </div>
+
+    <h2 class="section-title">The rules that save you <span class="section-note">learned in under 10 minutes</span></h2>
+    <div class="rules-grid" id="homeRules"></div>
+
+    <section class="dev-card" aria-label="About the developer">
+      <div class="dev-photo" data-photo="./another%20one/founder.jpeg">
+        <span class="dev-initials" aria-hidden="true">DG</span>
+      </div>
+      <div class="dev-copy">
+        <span class="dev-eyebrow">Designed &amp; developed by</span>
+        <h3>Debanjan Ghosh</h3>
+        <p class="dev-meta">Class XI-A · PM Shri Kendriya Vidyalaya No. 2 Faridabad</p>
+        <p class="dev-line">Built as a student project so that cyber safety feels like a game — and actually sticks.</p>
+      </div>
+      <span class="dev-badge">🛡️ Student-built</span>
+    </section>
+  </section>
+
+  <!-- Mission hub -->
+  <section class="screen" id="s-hub">
+    <div class="hub-top">
+      <div class="profile">
+        <div class="avatar" id="pAvatar">A</div>
+        <div class="pinfo">
+          <div class="pname" id="pName">Agent</div>
+          <div class="plvl"><span id="pLevel">Recruit</span> <em>·</em> <span id="pXp">0 XP</span> <em>·</em> <span id="pToNext">150 XP to next rank</span></div>
+          <div class="xpbar big"><i id="pBar"></i></div>
+          <div class="profile-badges" id="profileBadges" aria-label="Earned badges"></div>
+        </div>
+      </div>
+      <div class="statpill"><b id="pBadges">0</b><span>badges</span></div>
+      <div class="statpill"><b id="pDone">0/5</b><span>missions</span></div>
+    </div>
+
+    <h2 class="section-title">Mission control</h2>
+    <div class="practice-control">
+      <div>
+        <b>Practice mode</b>
+        <span>Take your time: no countdown and mistakes won't cost a life.</span>
+      </div>
+      <button class="practice-toggle" id="practiceToggle" type="button" aria-pressed="false">
+        <span class="practice-switch" aria-hidden="true"></span>
+        <span id="practiceToggleLabel">Off</span>
+      </button>
+    </div>
+    <div class="mission-grid" id="missionGrid"></div>
+
+    <h2 class="section-title">Badges</h2>
+    <div class="badges" id="badgeGrid"></div>
+
+    <h2 class="section-title">
+      Field manual
+      <span class="section-note">six habits of people who don't get hacked</span>
+    </h2>
+    <div class="rules-grid" id="hubRules"></div>
+
+    <div class="hub-foot">
+      <button class="ghost" id="resetBtn" type="button">Reset progress</button>
+      <span class="micro">Your progress is saved on this device only.</span>
+    </div>
+  </section>
+
+  <!-- Active mission -->
+  <section class="screen" id="s-play">
+    <div class="play-top">
+      <button class="ghost small" id="quitBtn" type="button">← Abort</button>
+      <div class="play-meta">
+        <span class="ptitle" id="playTitle">Mission</span>
+        <span class="pkind" id="playKind">—</span>
+      </div>
+      <div class="hud">
+        <div class="hearts" id="hearts" aria-label="Lives"></div>
+        <div class="timer" id="timerRing" role="timer" aria-label="Time remaining"><span id="timerNum">60</span></div>
+      </div>
+    </div>
+
+    <div class="bossbar" id="bossbar" hidden>
+      <div class="bossface" id="bossFace">👾</div>
+      <div class="bossmeta">
+        <div class="bossname">NULLBYTE <span>· rogue AI</span></div>
+        <div class="hp"><i id="bossHp"></i></div>
+      </div>
+      <div class="bosshpnum" id="bossHpNum">100</div>
+    </div>
+
+    <div class="progress"><i id="playProgress"></i></div>
+    <div id="stage"></div>
+    <p class="kbdhint">Shortcuts: <kbd>1</kbd>–<kbd>4</kbd> to answer · <kbd>H</kbd> for a clue · <kbd>Enter</kbd> to continue</p>
+  </section>
+
+  <!-- Mission results -->
+  <section class="screen" id="s-result">
+    <div id="resultInner"></div>
+  </section>
+</main>
+
+<!-- Answer feedback -->
+<div class="sheet" id="sheet" role="dialog" aria-live="polite" aria-label="Answer feedback">
+  <div class="sheet-inner" id="sheetInner"></div>
+</div>
+
+<dialog class="badge-dialog" id="badgeDialog" aria-labelledby="badgeDialogTitle" aria-describedby="badgeDialogDescription">
+  <div class="badge-dialog-inner">
+    <div class="badge-dialog-spark" aria-hidden="true">🏆</div>
+    <p class="badge-dialog-eyebrow">Achievement unlocked</p>
+    <h2 id="badgeDialogTitle">You earned a badge!</h2>
+    <p id="badgeDialogDescription">Great work, Agent. Keep learning and collecting badges.</p>
+    <div class="badge-dialog-list" id="badgeDialogList"></div>
+    <button class="btn primary badge-dialog-close" id="closeBadgeDialog" type="button">Awesome! →</button>
+  </div>
+</dialog>
+
+<dialog class="reset-dialog" id="resetDialog" aria-labelledby="resetTitle" aria-describedby="resetDescription">
+  <div class="reset-dialog-inner">
+    <div class="reset-icon" aria-hidden="true">⟲</div>
+    <p class="reset-eyebrow">Take a fresh start</p>
+    <h2 id="resetTitle">Reset all progress?</h2>
+    <p id="resetDescription">
+      This will clear your saved player profile and return Cyber Sentinels to its welcome screen.
+    </p>
+    <div class="reset-details">
+      <span aria-hidden="true">🧹</span>
+      <span><b>This removes</b><br>Codename, XP, badges, mission scores and saved progress on this device.</span>
+    </div>
+    <p class="reset-reassurance">
+      Your game files and missions will stay safe. This action cannot be undone.
+    </p>
+    <div class="reset-actions">
+      <button class="reset-keep" id="cancelReset" type="button">Keep my progress</button>
+      <button class="reset-confirm" id="confirmReset" type="button">Reset progress</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog class="feedback-dialog" id="feedbackDialog" aria-labelledby="feedbackTitle" aria-describedby="feedbackDescription">
+  <div class="feedback-inner">
+    <button class="feedback-close" id="closeFeedback" type="button" aria-label="Close feedback">×</button>
+    <div id="feedbackFormView">
+      <div class="feedback-spark" aria-hidden="true">🎉</div>
+      <p class="feedback-eyebrow">Fresh start, quick feedback</p>
+      <h2 id="feedbackTitle">How are you liking the game?</h2>
+      <p id="feedbackDescription" class="feedback-description">
+        Your rating and review stay on this device. Nothing is sent to a server.
+      </p>
+      <fieldset class="rating-field">
+        <legend>Choose a rating</legend>
+        <div class="rating-options">
+          <button
+            type="button"
+            class="rating-option"
+            data-rating="1"
+            aria-pressed="false"
+            aria-label="1 out of 5 — Not for me"
+          >
+            <span>😕</span>
+            <small>Not for me</small>
+          </button>
+          <button
+            type="button"
+            class="rating-option"
+            data-rating="2"
+            aria-pressed="false"
+            aria-label="2 out of 5 — Could be better"
+          >
+            <span>😐</span>
+            <small>Could be better</small>
+          </button>
+          <button
+            type="button"
+            class="rating-option"
+            data-rating="3"
+            aria-pressed="false"
+            aria-label="3 out of 5 — It is okay"
+          >
+            <span>🙂</span>
+            <small>It's okay</small>
+          </button>
+          <button
+            type="button"
+            class="rating-option"
+            data-rating="4"
+            aria-pressed="false"
+            aria-label="4 out of 5 — I like it"
+          >
+            <span>😊</span>
+            <small>Like it</small>
+          </button>
+          <button
+            type="button"
+            class="rating-option"
+            data-rating="5"
+            aria-pressed="false"
+            aria-label="5 out of 5 — Love it"
+          >
+            <span>🤩</span>
+            <small>Love it</small>
+          </button>
+        </div>
+      </fieldset>
+      <label class="review-label" for="reviewText">Want to leave a short review? <span>Optional</span></label>
+      <textarea id="reviewText" maxlength="400" rows="3" placeholder="What did you enjoy, or what could be better?"></textarea>
+      <p id="feedbackError" class="feedback-error" role="alert" hidden>Please choose a rating first.</p>
+      <div class="feedback-actions">
+        <button id="sendReview" class="feedback-submit" type="button">Send my review</button>
+        <button id="sendCheer" class="feedback-cheer" type="button">Send a cheer 🎉</button>
+      </div>
+    </div>
+    <div id="feedbackThanks" class="feedback-thanks" hidden aria-live="polite">
+      <div id="thanksEmoji" class="thanks-emoji" aria-hidden="true">🙌</div>
+      <h2 id="thanksTitle">Thanks for the feedback!</h2>
+      <p id="thanksMessage">
+        Your response stays on this device and hasn't been sent anywhere.
+      </p>
+      <button id="finishFeedback" class="feedback-submit" type="button">Back to the game</button>
+    </div>
+    <div class="feedback-founder">
+      <img src="./another%20one/founder.jpeg" alt="Debanjan Ghosh, designer and developer">
+      <div>
+        <strong>Debanjan Ghosh</strong>
+        <span>Founder &amp; Developer · Class XI-A</span>
+        <span>PM Shri Kendriya Vidyalaya No. 2 Faridabad</span>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<footer class="sitefoot">
+  <span>🛡️ <b>Cyber Sentinels</b> — a free cybersecurity awareness game for students</span>
+  <span class="dotsep">·</span>
+  <span>Designed &amp; developed by <b>Debanjan Ghosh</b>, Class XI-A · PM Shri Kendriya Vidyalaya No. 2 Faridabad</span>
+</footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
